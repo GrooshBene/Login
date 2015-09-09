@@ -77,8 +77,8 @@ app.get('/login_success', ensureAuthenticated, function(req, res) {
   // res.render('users', { user: req.user });
 });
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
+http.listen(80, function() {
+  console.log("Server Running On Port 3000");
 });
 
 function ensureAuthenticated(req, res, next) {
