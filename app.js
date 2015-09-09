@@ -1,7 +1,8 @@
 var express = require('express');
+var app = express();
 var routes = require('./routes');
 var user = require('./routes/user');
-var http = require('http');
+var http = require('http').Server(app);
 var path = require('path');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
@@ -42,10 +43,7 @@ passport.use(new LocalStrategy({
   }
 }));
 
-var app = express();
-
 // all environments
-app.set('port', process.env.PORT || 80);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -78,7 +76,7 @@ app.get('/login_success', ensureAuthenticated, function(req, res) {
 });
 
 http.listen(80, function() {
-  console.log("Server Running On Port 3000");
+  console.log("Server Running On Port 80");
 });
 
 function ensureAuthenticated(req, res, next) {
