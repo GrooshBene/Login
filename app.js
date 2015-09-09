@@ -6,6 +6,7 @@ var http = require('http').Server(app);
 var path = require('path');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
+var io = require('socket.io')(http);
 var flash = require('connect-flash') // session 관련해서 사용됨. 로그인 실패시 session등 클리어하는 기능으로 보임.
 
 
@@ -32,10 +33,10 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, userid, password, done) {
-  if (userid == 'hello' && password == 'world') {
+  if (userid == 'test' && password == 'test') {
     var user = {
-      'userid': 'hello',
-      'email': 'hello@world.com'
+      'userid': 'test',
+      'email': 'test@edcan.kr'
     };
     return done(null, user);
   } else {
@@ -71,9 +72,24 @@ app.post('/login',
   });
 
 app.get('/login_success', ensureAuthenticated, function(req, res) {
-  res.send(req.user);
+  res.redirect('/chat.html');
   // res.render('users', { user: req.user });
 });
+
+app.get('/', function(req, res) {
+  res.redirect('/login.html');
+});
+
+io.on('connection', function(socket) {
+  console.log('User Connected');
+  socket.on('disconnect', function() {
+    console.log('User Disconnected');
+  });
+  socket.on('chat message', function(msg) {
+    console.log('message : ' + msg);
+    io.emit('chat message', msg);
+  })
+})
 
 http.listen(80, function() {
   console.log("Server Running On Port 80");
