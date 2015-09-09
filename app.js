@@ -81,13 +81,13 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log(socket.request.connection.remoteAddress);
-  console.log('User Connected');
+  var ip = socket.request.connection.remoteAddress
+  console.log('User' + ip + ' Connected');
   socket.on('disconnect', function() {
-    console.log('User Disconnected');
+    console.log('User' + ip + ' Disconnected');
   });
   socket.on('chat message', function(msg) {
-    console.log('message : ' + msg);
+    console.log('User' + ip + ' messaged : ' + msg);
     io.emit('chat message', msg);
   });
 });
