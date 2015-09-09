@@ -81,6 +81,7 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+  console.log(socket.request.connection.remoteAddress);
   console.log('User Connected');
   socket.on('disconnect', function() {
     console.log('User Disconnected');
@@ -88,8 +89,8 @@ io.on('connection', function(socket) {
   socket.on('chat message', function(msg) {
     console.log('message : ' + msg);
     io.emit('chat message', msg);
-  })
-})
+  });
+});
 
 http.listen(80, function() {
   console.log("Server Running On Port 80");
